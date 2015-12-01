@@ -225,7 +225,7 @@ protected:
     return mshrPorts[getBankId(addr)]->nextSlot();
   }
 
-  virtual void sendMiss(MemRequest *mreq) = 0;
+  virtual void sendMiss(MemRequest *mreq) = 0;   //cache mising 时调用
 
   void doReadBank(MemRequest *mreq);
   void doRead(MemRequest *mreq);
@@ -293,7 +293,7 @@ public:
   void access(MemRequest *mreq);
   virtual void read(MemRequest *mreq);
   virtual void write(MemRequest *mreq);
-  virtual void pushLine(MemRequest *mreq) = 0;
+  virtual void pushLine(MemRequest *mreq) = 0;   //写回一行,cache writeback
   virtual void specialOp(MemRequest *mreq);
   virtual void returnAccess(MemRequest *mreq);
 

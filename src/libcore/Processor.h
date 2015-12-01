@@ -70,7 +70,7 @@ protected:
   Pid_t findVictimPid() const;
   bool hasWork() const;
 
-  void advanceClock();
+  void advanceClock();  // increments the CPU clock of the simulated processor   fetch issue retire
 
   StallCause addInst(DInst *dinst);
   

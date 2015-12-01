@@ -236,7 +236,7 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
     exit(0);
   }
   
-  for(; i < argc; i++) {
+  for(; i < argc; i++) {     //对参数进行梳理
     if(argv[i][0] == '-') {
       if( argv[i][1] == 'w' ){
         if( isdigit(argv[i][2]) )
@@ -397,7 +397,6 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
       name = p + 1;
   }
   benchName = strdup(name);
-
   I(nInst2Skip>=0);
 
 #ifndef QEMU_DRIVEN
@@ -410,7 +409,7 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
   }
   nargc = ni;
 
-  SescConf = new SConfig(confName);   // First thing to do
+  SescConf = new SConfig(confName);   // First thing to do  //获得配置文件名
 
   Instruction::initialize(nargc, nargv, envp);
 
