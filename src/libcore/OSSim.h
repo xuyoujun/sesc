@@ -120,7 +120,8 @@ protected:
 
 public:
 
-  RunningProcs cpus;
+  RunningProcs cpus;    //在运行的cpu数目
+  
   OSSim(int32_t argc, char **argv, char **envp);
   virtual ~OSSim();
 

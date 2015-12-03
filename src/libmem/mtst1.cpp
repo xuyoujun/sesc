@@ -25,7 +25,7 @@ int32_t main(int32_t argc, char **argv, char **envp)
 #ifdef TASKSCALAR
   taskHandler = new TaskHandler();
 #endif
-  osSim = new OSSim(argc, argv, envp);  //初始化一个模拟器
+  osSim = new OSSim(argc, argv, envp);  //初始化一个OS模拟器
 
   int32_t nProcs = SescConf->getRecordSize("","cpucore");  //得到处理器的个数
 

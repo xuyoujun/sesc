@@ -63,7 +63,7 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #include "ThreadContext.h"
 #include "OSSim.h"
 
-OSSim   *osSim=0;
+OSSim   *osSim=0;    //osSim 是一个全局变量
 
 #ifdef QEMU_DRIVEN
 extern "C" long long n_inst_stop;
@@ -125,6 +125,8 @@ void OSSim::reportOnTheFly(const char *file)
   free(tmp);
 }
 
+
+/*主要作用是对参数进行处理，如果SESC_ENERGY 定义了，则初始化能量子系统*/
 OSSim::OSSim(int32_t argc, char **argv, char **envp)
   : traceFile(0) 
     ,snapshotGlobalClock(0)    
@@ -140,7 +142,7 @@ OSSim::OSSim(int32_t argc, char **argv, char **envp)
 
   char *tmp=(char *)malloc(argc*50+4096);
   tmp[0] = 0;
-  for(int32_t i = 0; i < argc; i++) {
+  for(int32_t i = 0; i < argc; i++) {  //把参数都放到tmp 中
     strcat(tmp,argv[i]);
     strcat(tmp," ");
   }
@@ -162,13 +164,13 @@ OSSim::OSSim(int32_t argc, char **argv, char **envp)
   nenv[0] = 0;
   processParams(argc,argv,nenv);
 #else
-  processParams(argc,argv,envp);
+  processParams(argc,argv,envp); //对参数进行处理,初始化输出文件 ,INstruction::initization
 #endif
 #if (defined TLS)
   tls::Epoch::staticConstructor();
 #endif
 
-#ifdef SESC_ENERGY
+#ifdef SESC_ENERGY             //初始化能量子系统
   // initialize the energy subsystem
   EnergyMgr::init();
 #endif
@@ -180,12 +182,12 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
   bool trace_flag = false;
 
   // Change, add parameters to mint
-  char **nargv = (char **)malloc((20+argc)*sizeof(char *));
+  char **nargv = (char **)malloc((20+argc)*sizeof(char *)); //为指向参数的指针申请空间
   int32_t nargc;
   
-  nargv[0] = strdup(argv[0]);
+  nargv[0] = strdup(argv[0]); //拷贝argv[0]address的内容给nargv[0] address
 
-  int32_t i=1;
+  int32_t i=1;   //从第一个参数开始处理  第0个是命令sesc.mem 不需要处理
   int32_t ni=1;
 
   nInst2Skip=0;
@@ -201,7 +203,7 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
 
   const char *xtraPat=0;
   const char *reportTo=0;
-  const char *confName=0;
+  const char *confName=0;  //配置文件名
   const char *extension=0;
   justTest=false;
 
@@ -240,12 +242,12 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
     if(argv[i][0] == '-') {
       if( argv[i][1] == 'w' ){
         if( isdigit(argv[i][2]) )
-          nInst2Skip = strtoll(&argv[i][2], 0, 0 );
+          nInst2Skip = strtoll(&argv[i][2], 0, 0 );  //the number of instruction need to skip?
         else {
           i++;
           nInst2Skip = strtoll(argv[i], 0, 0 );
         }
-      }else if( argv[i][1] == 'y' ){
+      }else if( argv[i][1] == 'y' ){               //the number of instruction need to simulate?
         if( isdigit(argv[i][2]) )
           nInst2Sim = strtoll(&argv[i][2], 0, 0 );
         else {
@@ -330,7 +332,7 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
       }
       else if( argv[i][1] == 'c' ) {
         if( argv[i][2] != 0 )
-          confName = &argv[i][2];
+          confName = &argv[i][2];  //-cconfName argv[i][0] is -  argv[i][1] is c 
         else {
           i++;
           confName = argv[i];
@@ -346,7 +348,7 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
         }
       }
 
-      else if( argv[i][1] == 'd' ) {
+      else if( argv[i][1] == 'd' ) {   //change the name of report file to reportTo 
         I(reportTo==0);
         if( argv[i][2] != 0 )
           reportTo = &argv[i][2];
@@ -356,7 +358,7 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
         }
       }
       
-      else if( argv[i][1] == 'f' ) {
+      else if( argv[i][1] == 'f' ) {  //the extension name of the report file 
         I(extension==0);
         if( argv[i][2] != 0 )
           extension = &argv[i][2];
@@ -370,13 +372,13 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
         justTest = true;
       }
 
-      else if( argv[i][1] == 't' ) {
+      else if( argv[i][1] == 't' ) {        //Do not execute, just test the configuration file 
         justTest = true;
       }
 
-      else if( argv[i][1] == 'T' ) {
+      else if( argv[i][1] == 'T' ) {       //generate trace-file
         trace_flag = true;
-      }else{
+      }else{  //对 其它的参数进行处理，都放入 nargv中
         nargv[ni] = strdup(argv[i]);
         ni++;
       }
@@ -396,7 +398,7 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
     if (p)
       name = p + 1;
   }
-  benchName = strdup(name);
+  benchName = strdup(name);   //beanch name
   I(nInst2Skip>=0);
 
 #ifndef QEMU_DRIVEN
@@ -409,9 +411,9 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
   }
   nargc = ni;
 
-  SescConf = new SConfig(confName);   // First thing to do  //获得配置文件名
+  SescConf = new SConfig(confName);   // First thing to do  //获得配置文件对象
 
-  Instruction::initialize(nargc, nargv, envp);
+  Instruction::initialize(nargc, nargv, envp);                 //初始化Instruction class
 
   if( reportTo ) {
     reportFile = (char *)malloc(30 + strlen(reportTo));
@@ -429,7 +431,7 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
   }
  
   char *finalReportFile = (char *)strdup(reportFile);
-  Report::openFile(finalReportFile);
+  Report::openFile(finalReportFile);                      //输出文件进行处理
 
 #ifdef SESC_THERM
   {

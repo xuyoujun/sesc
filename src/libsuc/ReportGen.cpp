@@ -50,7 +50,7 @@ void Report::openFile(char *name)
   if(strstr(name, "XXXXXX")) {
     int32_t fd;
     
-    fd = mkstemp(name);
+    fd = mkstemp(name);/*mkstemp函数只有一个参数，这个参数是个以“XXXXXX”结尾的非空字符串。mkstemp函数会用随机产生的字符串替换“XXXXXX”，保证 了文件名的唯一性。 函数返回一个文件描述符，如果执行失败返回-1。*/
     
     ffd = fdopen(fd, "a");
   }else{

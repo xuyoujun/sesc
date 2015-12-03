@@ -56,7 +56,7 @@ class XactionManager;
 class GProcessor {
 private:
 protected:
-  // Per instance data
+  // Per instance data   CPU的一些参数
   const CPU_t Id;
   const int32_t FetchWidth;
   const int32_t IssueWidth;
@@ -114,7 +114,7 @@ protected:
   GStatsCntr *nInstFake[MaxInstType];
 #endif
 
-  // "Lack of Retirement" Stats
+  // "Lack of Retirement" Stats   统计数据
   GStatsCntr  noFetch;
   GStatsCntr  noFetch2;
 

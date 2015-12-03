@@ -67,7 +67,7 @@ GProcessor::GProcessor(GMemorySystem *gm, CPU_t i, size_t numFlows)
 {
   // osSim should be already initialized
   I(osSim);
-  osSim->registerProc(this);
+  osSim->registerProc(this);                       //把这个处理器注册到osSim  ,osSim 就像个操作系统一样，对这些处理器进行管理
 
   SescConf->isInt("cpucore", "issueWidth",i);
   SescConf->isLT("cpucore", "issueWidth", 1025,i); // no longer than uint16_t

@@ -40,7 +40,7 @@ MemorySystem::MemorySystem(int32_t processorId)
   : GMemorySystem(processorId)
   ,pID(processorId)
 {
-  if (SescConf->isInt("",k_procsPerNode))
+  if (SescConf->isInt("",k_procsPerNode))   //得到每个节点有多少个processor
     procsPerNode = SescConf->getInt("",k_procsPerNode);
   else
     procsPerNode = 1;

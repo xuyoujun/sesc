@@ -47,7 +47,7 @@ struct hash_unsigned_long_long {
   } 
 };
 
-class GStats {
+class GStats {   //这是一个基类
 private:
   typedef std::list < GStats * >Container;
   typedef std::list < GStats * >::iterator ContainerIter;

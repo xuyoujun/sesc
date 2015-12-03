@@ -179,7 +179,7 @@ Config::Config(const char *name,
 
   fpname = strdup(name);
 
-  if(!readConfigFile(this, fp, fpname))
+  if(!readConfigFile(this, fp, fpname))   //读取配置文件,,配置文件用lex和yacc处理
     exit(0);
 
   if(errorReading)
