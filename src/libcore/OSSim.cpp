@@ -332,7 +332,7 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
       }
       else if( argv[i][1] == 'c' ) {
         if( argv[i][2] != 0 )
-          confName = &argv[i][2];  //-cconfName argv[i][0] is -  argv[i][1] is c 
+          confName = &argv[i][2];  //-cconfName argv[i][0] is - , argv[i][1] is c 
         else {
           i++;
           confName = argv[i];
@@ -867,17 +867,17 @@ void OSSim::initBoot()
     return;
   alreadyBoot = true;
 
-  ProcessId::boot();
+  ProcessId::boot();  //Ö÷ÒªÊÇÎª½ø³ÌÉêÇë¿Õ¼ä
 
   // FIXME2: Change this for a static method in MemoryOS so that MemoryOS::boot
   // is called instead (it would call all the reserved memorysystem). Once this
   // is done, remove GMemorySystem from GProcessor.
-  for(size_t i=0; i < cpus.size(); i++) {
-    I(cpus.getProcessor(i));
-    I(cpus.getProcessor(i)->getMemorySystem());
+  for(size_t i=0; i < cpus.size(); i++) {                    //cpuÊÇÔÚ´´½¨´¦ÀíÆ÷µÄÊ±ºò£¬×¢²áµ½osOSimµÄ
+    I(cpus.getProcessor(i));  //ÊÇÒ»¸öÖ¸ÏòGProcessor ¶ÔÏóµÄÖ¸Õë
+    I(cpus.getProcessor(i)->getMemorySystem());   //ÊÇÒ»¸öÖ¸ÏòMemorySystem¶ÔÏóµÄÖ¸Õë
     I(cpus.getProcessor(i)->getMemorySystem()->getMemoryOS());
 
-    cpus.getProcessor(i)->getMemorySystem()->getMemoryOS()->boot();
+    cpus.getProcessor(i)->getMemorySystem()->getMemoryOS()->boot();  //Æô¶¯os
   }
 
 #ifdef VALUEPRED
@@ -903,7 +903,9 @@ void OSSim::initBoot()
   // Launch the boot flow
   // -1 is the parent pid
   // 0 is the current thread, and it has no flags
-
+  
+  //Ô­ÐÍ,void eventSpawn(Pid_t curPid, Pid_t newPid, int32_t flags, bool stopped=false);
+  //å**********½¨Á¢Ò»¸ö½ø³Ì
   eventSpawn(-1,0,0);
 #endif
 
@@ -943,7 +945,7 @@ void OSSim::preBoot()
     nInst2Sim = ((~0ULL) - 1024)/2;
   }
 
-  FetchEngine::setnInst2Sim(nInst2Sim);
+  FetchEngine::setnInst2Sim(nInst2Sim);  //ÉèÖÃÒªsimµÄÖ¸ÁîµÄÊýÄ¿
 
 #ifdef QEMU_DRIVEN
   n_inst_stop = nInst2Sim;
@@ -976,7 +978,7 @@ void OSSim::preBoot()
       MSG("Start rabbit mode forever...");
     }else
       MSG("Start Skipping Initialization (skipping %lld instructions)...",nInst2Skip);
-    GProcessor *proc = pid2GProcessor(0);
+    GProcessor *proc = pid2GProcessor(0);  //½ø³ÌIDµ½ processorµÄ×ª»»
     proc->goRabbitMode(nInst2Skip);
     MSG("...End Skipping Initialization (Rabbit mode)");
   }else if( simMarks.begin || simMarks.mtMarks ) {

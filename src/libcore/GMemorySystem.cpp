@@ -158,7 +158,7 @@ void GMemorySystem::buildMemorySystem()
     instrSource->computenUpperCaches();
   }
 
-  memoryOS = buildMemoryOS(def_block);
+  memoryOS = buildMemoryOS(def_block);  //建一个内存 OS?
 }
 
 char *GMemorySystem::buildUniqueName(const char *device_type)

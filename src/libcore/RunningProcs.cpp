@@ -93,7 +93,7 @@ void RunningProcs::run()
 
   IS(currentCPU = 0);
 
-  do{
+  do{ //第一层while,EventScheduler的cbQ中有callback存在
     if ( workingList.empty() ) {
       EventScheduler::advanceClock();
     }
@@ -102,19 +102,21 @@ void RunningProcs::run()
     HVersionDomain::tryPropagateSafeTokenAll();
 #endif
     
-    while (hasWork()) {
+    while (hasWork()) {       //第二层while ,有processor 在工作
       stayInLoop=true;
 
       startProc = 0;
 
-      do{
+      do{                      //第三层while, 有processor在工作
         // Loop duplicated so round-robin fetch starts on different
         // processor each cycle <><>
 
+		//下面的两个循环的目的是遍历所有的在工作的CPU ,然后调用advanceClock
+		//递增每个CPU的clock，完成一个取指/译码/执行/retire的过程
         for(size_t i=startProc ; i < workingList.size() ; i++) {
-          if (workingList[i]->hasWork()) {
+          if (workingList[i]->hasWork()) {  //cpu在工作
             currentCPU = workingList[i];
-            currentCPU->advanceClock();
+            currentCPU->advanceClock();//currentCPU指向的是Processor类的对象，
           }else{
             workingListRemove(workingList[i]);
           }
@@ -133,13 +135,13 @@ void RunningProcs::run()
           startProc = 0;
 
         IS(currentCPU = 0);
-        EventScheduler::advanceClock();
-      }while(stayInLoop);
+        EventScheduler::advanceClock();  //处理一个回调函数事件
+      }while(stayInLoop);   //会在workingListRemove中判断workingList 是否为空，如果为空则stayInLoop = false
 #ifdef SESC_THERM
       ReportTherm::stopCB();
 #endif
     }
-  }while(!EventScheduler::empty());
+  }while(!EventScheduler::empty());//EventScheduler::中还有callback存在。
   
   
 }
@@ -149,23 +151,23 @@ void RunningProcs::makeRunnable(ProcessId *proc)
   // The process must be in the InvalidState
   I(proc->getState()==InvalidState);
   // Now the process is runnable (but still not running)
-  ProcessId *victimProc=proc->becomeReady();
+  ProcessId *victimProc=proc->becomeReady(); //让进程处于runnable
   // Get the CPU where the process would like to run
-  CPU_t cpu=proc->getCPU();
+  CPU_t cpu=proc->getCPU();                 //获得进程对应的cpu编号
   // If there is a preferred CPU, try to schedule there
-  if(cpu>=0){
+  if(cpu>=0){                               //获得cpu
     // Get the GProcessor of the CPU
-    GProcessor *core=getProcessor(cpu);
+    GProcessor *core=getProcessor(cpu);     //根据编号获得GProcessor
     // Are there available flows on this CPU
     if(core->availableFlows()){
       // There is an available flow, grab it
-      switchIn(cpu,proc);
+      switchIn(cpu,proc);                   //进程proc 和 cpu 绑定起来
       return;
     }
   }
   // Could not run the process on the cpu it wanted
   // If the process is not pinned to that processor, try to find another cpu
-  if(!proc->isPinned()){
+  if(!proc->isPinned()){                   //进程没有被钉死
     // Find an available processor
     GProcessor *core=getAvailableProcessor();
     // If available processor found, run there
@@ -178,11 +180,11 @@ void RunningProcs::makeRunnable(ProcessId *proc)
   // If there is a process to evict, switch it out and switch the new one in its place
   if(victimProc){
     I(victimProc->getState()==RunningState);
-    // get the processor where victim process is running
+    // get the processor where victim process is running   进程的迁移可以在这里
     cpu=victimProc->getCPU();
-    switchOut(cpu, victimProc);
-    switchIn(cpu,proc);
-    victimProc->becomeNonReady();
+    switchOut(cpu, victimProc);      //把victimCPU切换出去
+    switchIn(cpu,proc);              //把cpu对应的CPU切换进入
+    victimProc->becomeNonReady();    
     makeRunnable(victimProc);
   }
   // No free processor, no process to evict
@@ -250,10 +252,11 @@ void RunningProcs::switchIn(CPU_t id, ProcessId *proc)
 
   workingListAdd(core);
 
-  proc->switchIn(id);
+  proc->switchIn(id);     //proc 运行在cpu id上
 #ifdef TS_STALL  
   core->setStallUntil(globalClock+5);
 #endif  
+//core 上运行的是proc
   core->switchIn(proc->getPid()); // Must be the last thing because it can generate a switch
 }
 

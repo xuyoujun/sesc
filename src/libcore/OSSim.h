@@ -120,7 +120,7 @@ protected:
 
 public:
 
-  RunningProcs cpus;    //在运行的cpu数目
+  RunningProcs cpus;    //*****在运行的cpu数目，对这些cpu进行管理
   
   OSSim(int32_t argc, char **argv, char **envp);
   virtual ~OSSim();
@@ -322,7 +322,7 @@ public:
   // handler. This may happen in a misspeculation, the simulator would be
   // restarted.
   virtual void boot() {
-    initBoot();
+    initBoot();  //启动OS
     preBoot();
     if(!justTest)
       postBoot();

@@ -46,7 +46,7 @@ enum ProcessIdState {
 
 // This class stores the information about a thread (pid). It includes
 // the flags, the current running processor....
-class ProcessId {
+class ProcessId {   //½ø³ÌIDÀà
 public:
 
   // Stats gathered for each thread

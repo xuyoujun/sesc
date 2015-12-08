@@ -51,8 +51,8 @@ long long ProcessId::nRestartWPathInsts= 0;
 void ProcessId::boot()
 {
 #if !(defined TLS)
-  for(size_t i=0;i<=MAXPROC;i++) {
-    pidTable.push_back(0);
+  for(size_t i=0;i<=MAXPROC;i++) {           //MAXPROC是模拟器可以模拟的最大的进程数目
+    pidTable.push_back(0);                   //先申请空间
   }
 #endif
 }

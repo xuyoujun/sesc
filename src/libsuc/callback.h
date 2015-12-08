@@ -54,13 +54,17 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 //
 /////////////////////////////////////////////////////////////////////////////
 
+
+/*主要的内容：EventScheduler是一个基类，许多回调类继承与它，它有一个cbQ静态成员，这个成员管理着所有的回调类对象。
+advanceClock()是EventScheduler的一个静态成员函数，globalClock是一个全局的变量，advanceClock()根据globalClock调用cbQ中
+对象的call()函数，这个call函数调用回调函数。*/
 class EventScheduler 
   : public TQueue<EventScheduler *, Time_t>::User 
 {
 private:
   typedef TQueue<EventScheduler *,Time_t> TimedCallbacksQueue;
 
-  static TimedCallbacksQueue cbQ;
+  static TimedCallbacksQueue cbQ;   //所有的派生类共同使用这么一个数据结构
   
 #ifdef DEBUG
   const char *fileName;
@@ -68,14 +72,14 @@ private:
 #endif
 protected:
 public:
-  virtual void call() = 0;
+  virtual void call() = 0;              //这是个纯虚函数，需要在子类中实现
   virtual ~EventScheduler() {
     // Nothing
   }
 
   void dump() const;
 
-  static void schedule(Time_t tim, EventScheduler *cb) {
+  static void schedule(Time_t tim, EventScheduler *cb) {   //给出调度的时间
     MSG("BOG ALERT! BUGABUGABUG.\nPerhaps you meant to use scheduleAbs");
     exit(1);
   }
@@ -98,7 +102,7 @@ public:
     exit(1);
   }
   static void scheduleAbs(Time_t tim, EventScheduler *cb) {
-    I(tim > globalClock); // Only for performance reasons
+    I(tim > globalClock);                       // Only for performance reasons
 #ifdef DEBUG
 #ifdef NANASSERTFILE
     cb->fileName = NANASSERTFILE;
@@ -112,9 +116,9 @@ public:
   }
 
   static void advanceClock() {
-    EventScheduler *cb;
+    EventScheduler *cb; //指向派生类的对象，由于call()是同一个纯虚函数，实际执行的call()是派生类对象中的。
 
-    while ((cb = cbQ.nextJob(globalClock)) ) {
+    while ((cb = cbQ.nextJob(globalClock)) ) {  //调用回调类里面的call()函数。
       cb->call();
     }
     globalClock++;
@@ -239,14 +243,14 @@ public:
 
 template<class Parameter1, class Parameter2, class Parameter3, void (*funcPtr) (Parameter1, Parameter2, Parameter3)>
 typename CallbackFunction3<Parameter1,Parameter2,Parameter3,funcPtr>::poolType 
-  CallbackFunction3<Parameter1,Parameter2,Parameter3,funcPtr>::cbPool(32, "CBF3");
+  CallbackFunction3<Parameter1,Parameter2,Parameter3,funcPtr>::cbPool(32, "CBF3");   //定义一个回调事件池。
 
 
 template<class Parameter1, class Parameter2,void (*funcPtr) (Parameter1, Parameter2)> 
 class CallbackFunction2
   : public CallbackBase {
 private:
-  typedef pool<CallbackFunction2> poolType;
+  typedef pool<CallbackFunction2> poolType;   //callbackpool
   static poolType cbPool;
   friend class pool<CallbackFunction2>;
 
@@ -711,7 +715,7 @@ public:
     if( tim == globalClock) {
       (i->*memberPtr)(a1);
     }else{
-      CallbackMember1 *cb = create(i,a1);
+      CallbackMember1 *cb = create(i,a1);  //从回调池中返回一个回调类
       EventScheduler::scheduleAbs(tim,cb);
     }
   }

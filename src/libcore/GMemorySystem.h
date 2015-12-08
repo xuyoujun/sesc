@@ -84,7 +84,7 @@ private:
 
   MemObj *instrSource;
   MemObj *dataSource;
-  GMemoryOS *memoryOS;
+  GMemoryOS *memoryOS;   //ÄÚ´æOS?
 
 protected:
   const int32_t Id;

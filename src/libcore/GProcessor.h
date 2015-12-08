@@ -57,7 +57,7 @@ class GProcessor {
 private:
 protected:
   // Per instance data   CPU的一些参数
-  const CPU_t Id;
+  const CPU_t Id;   //CPU的编号
   const int32_t FetchWidth;
   const int32_t IssueWidth;
   const int32_t RetireWidth;
@@ -67,7 +67,7 @@ protected:
   const size_t MaxFlows;
   const size_t MaxROBSize;
 
-  GMemorySystem *memorySystem;
+  GMemorySystem *memorySystem;   //一个处理器对应一个memorySystem ？
 
   FastQueue<DInst *> ROB;
 

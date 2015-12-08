@@ -31,17 +31,17 @@ Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 class GProcessor;
 
-class RunningProcs {
+class RunningProcs {  //运行着的processor
 private:
   bool stayInLoop;
   size_t startProc;
 
   typedef std::vector<GProcessor *> GProcCont;
-  GProcCont  workingList;
+  GProcCont  workingList;               //处于工作状态的processor
 
-  GProcessor *currentCPU;
+  GProcessor *currentCPU;               //当前的processor
   
-  std::vector<GProcessor *> cpuVector;
+  std::vector<GProcessor *> cpuVector;  //所有的processor
 
   // Multiset of processors
   typedef std::multiset<GProcessor *> ProcessorMultiSet;

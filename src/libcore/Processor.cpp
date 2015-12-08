@@ -133,7 +133,7 @@ void Processor::goRabbitMode(long long n2Skip)
   IFID.goRabbitMode(n2Skip);
 }
 
-void Processor::advanceClock()
+void Processor::advanceClock()   //增加CPU的clock
 {
 #ifdef TS_STALL
   if (isStall()) return;
@@ -144,7 +144,7 @@ void Processor::advanceClock()
   //  GMSG(!ROB.empty(),"robTop %d Ul %d Us %d Ub %d",ROB.getIdFromTop(0)
   //       ,unresolvedLoad, unresolvedStore, unresolvedBranch);
 
-  // Fetch Stage
+  // Fetch Stage                        取指
   if (IFID.hasWork() ) {
     IBucket *bucket = pipeQ.pipeLine.newItem();
     if( bucket ) {
@@ -152,7 +152,7 @@ void Processor::advanceClock()
     }
   }
   
-  // ID Stage (insert to instQueue)
+  // ID Stage (insert to instQueue)     译码
   if (spaceInInstQueue >= FetchWidth) {
     IBucket *bucket = pipeQ.pipeLine.nextItem();
     if( bucket ) {

@@ -650,7 +650,7 @@ const char *Config::getEnvVar(const char *block,
   return envVal;
 }
 
-void Config::dump(bool showAll)
+void Config::dump(bool showAll)  //Ä¬ÈÏshowAll ÊÇfalse
 {
   hashRecord_t::iterator hiter;
   const char *block;
