@@ -133,7 +133,7 @@ void Processor::goRabbitMode(long long n2Skip)
   IFID.goRabbitMode(n2Skip);
 }
 
-void Processor::advanceClock()   //增加CPU的clock
+void Processor::advanceClock()   //增加CPU的clock,模拟了一个cycle 指令流水线中的过程
 {
 #ifdef TS_STALL
   if (isStall()) return;
@@ -147,20 +147,20 @@ void Processor::advanceClock()   //增加CPU的clock
   // Fetch Stage                        取指
   if (IFID.hasWork() ) {
     IBucket *bucket = pipeQ.pipeLine.newItem();
-    if( bucket ) {
-      IFID.fetch(bucket);
+    if( bucket ) { 
+      IFID.fetch(bucket);  //从flow中取指令，放入bucket中。调用一个callback ，最终将bucket加入到pipeline 的buffer 中
     }
   }
   
-  // ID Stage (insert to instQueue)     译码
-  if (spaceInInstQueue >= FetchWidth) {
-    IBucket *bucket = pipeQ.pipeLine.nextItem();
+  // ID Stage (insert to instQueue)    
+  if (spaceInInstQueue >= FetchWidth) { 
+    IBucket *bucket = pipeQ.pipeLine.nextItem();  //从pipeline中的bufer中取
     if( bucket ) {
       I(!bucket->empty());
       //      I(bucket->top()->getInst()->getAddr());
       
       spaceInInstQueue -= bucket->size();
-      pipeQ.instQueue.push(bucket);
+      pipeQ.instQueue.push(bucket);          ////插入到指令队列
     }else{
       noFetch2.inc();
     }
@@ -169,8 +169,8 @@ void Processor::advanceClock()   //增加CPU的clock
   }
 
   // RENAME Stage
-  if ( !pipeQ.instQueue.empty() ) {
-    spaceInInstQueue += issue(pipeQ);
+  if ( !pipeQ.instQueue.empty() ) {   
+    spaceInInstQueue += issue(pipeQ);   //从指令队列发射 执行，调用addInst()把指令加入到ROB
     //    spaceInInstQueue += issue(pipeQ);
   }
   

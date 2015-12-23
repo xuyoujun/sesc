@@ -67,7 +67,7 @@ public:
     I(size<(256*1024)); // define FASTQUEUE_USE_QUEUE for those cases
 
     while(pipeMask & (pipeMask - 1))
-      pipeMask++;
+      pipeMask++;  //¼Óµ½2^n
 
     pipe = (Data *)malloc(sizeof(Data)*pipeMask);
     

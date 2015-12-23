@@ -54,7 +54,7 @@ enum PowerGroup {
 /***********************************************
   *            Definitions of stat classes
   ***********************************************/
-#ifndef SESC_ENERGY
+#ifndef SESC_ENERGY   //没有开启SESC_ENERGY
 
 class EnergyStore {
 private:
@@ -127,9 +127,9 @@ public:
     return 0.0;
   }
 };
-#else // SESC_ENERGY
+#else // 开启SESC_ENERGY   
 
-class EnergyStore {
+class EnergyStore {    //可以从配置文件中获取energy信息
 private:
   const char *proc;
 
@@ -142,7 +142,7 @@ public:
   double get(const char *name, int32_t procId=0);
 };
 
-class GStatsEnergyBase : public GStats {
+class GStatsEnergyBase : public GStats {  ///继承自Gstats
  public:
   virtual double getDouble() const = 0;
   virtual void inc() = 0;
@@ -163,8 +163,8 @@ protected:
   typedef std::vector< std::vector<GStatsEnergy *> > EProcStoreType;
   typedef std::vector< std::vector<GStatsEnergy *> > EGroupStoreType;
 
-  static EProcStoreType  eProcStore;  // Energy store per processor
-  static EGroupStoreType eGroupStore; // Energy store per group
+  static EProcStoreType  eProcStore;  // Energy store per processor   每个处理器 各个团体(fetch exec, mem etc)的能量
+  static EGroupStoreType eGroupStore; // Energy store per group       每个团体  所有处理器(cpu0,cpu1 etc)对应的 能量
 
   const double  StepEnergy;
   long long steps;

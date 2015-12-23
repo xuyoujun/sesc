@@ -70,7 +70,7 @@ typedef uint8_t MemDataSize;
  *  instruction.
  *
  */
-class Instruction {
+class Instruction {//二进制文件中的每个指令都有一个Instruction 对象与之对应。
 public:
   static icode_ptr LowerLimit;
   static icode_ptr UpperLimit;
@@ -78,10 +78,10 @@ public:
 private:
   static size_t InstTableSize;
   static int32_t    maxFuncID;
-  static Instruction *InstTable;
+  static Instruction *InstTable;     //指令表
   
   typedef HASH_MAP<int32_t, Instruction*> InstHash;
-  static InstHash instHash;
+  static InstHash instHash;   //一个指令对应一个整数
 
   static Instruction *simicsInstTable;
 
@@ -129,7 +129,7 @@ private:
 #else
  protected:
 #endif
-  InstType opcode;
+  InstType opcode;   //指令的类型
   RegType src1;
   RegType src2;
   RegType dest;

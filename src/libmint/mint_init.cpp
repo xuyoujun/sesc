@@ -105,18 +105,18 @@ void mint_init(int32_t argc, char **argv, char **envp)
   FILE *fd;
   
   Mint_output = stderr;
-  Simname = argv[0];
+  Simname = argv[0];          //模拟器名simulator
   parse_args(argc, argv);
   ThreadContext::staticConstructor();
 
   next_arg = optind;
-  Objname = argv[next_arg];
+  Objname = argv[next_arg];  //程序的路径及其名称
   
 #if (defined ADDRESS_SPACES)
-  ThreadContext *mainThread=ThreadContext::getMainThreadContext();
+  ThreadContext *mainThread=ThreadContext::getMainThreadContext();  //创建一个主线程
   AddressSpace  *addrSpace=new AddressSpace();
   mainThread->setAddressSpace(addrSpace);
-  loadElfObject(Objname,mainThread);
+  loadElfObject(Objname,mainThread); //
   size_t heapSize=Heap_size;
   VAddr  heapStart=addrSpace->findVMemLow(heapSize);
   addrSpace->newRMem(heapStart,heapStart+heapSize);

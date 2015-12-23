@@ -51,9 +51,9 @@ class GStats {   //这是一个基类
 private:
   typedef std::list < GStats * >Container;
   typedef std::list < GStats * >::iterator ContainerIter;
-  static Container *store;
+  static Container *store;   //存储着所有 继承 GStats类对象的指针。
   // Points to this GStats object's position in the GStats store
-  ContainerIter cpos;
+  ContainerIter cpos;    //对象在store中的位置。
 protected:
   char *name;
   char *getText(const char *format,
@@ -66,7 +66,7 @@ protected:
 public:
   int32_t gd;
 
-  static void report(const char *str);
+  static void report(const char *str);    //汇报store中指针指向对象中的所有数据。
   static GStats *getRef(const char *str);
 
   GStats() {

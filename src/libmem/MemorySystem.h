@@ -42,7 +42,7 @@ protected:
   virtual GMemoryOS *buildMemoryOS(const char *descr_section);
 
   uint32_t procsPerNode;
-  uint32_t pID;
+  uint32_t pID;      //processor ID
 
 public:
   // old Intf. MemorySystem(const char *descr_section = "memHierarchy");

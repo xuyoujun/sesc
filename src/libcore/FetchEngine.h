@@ -55,15 +55,17 @@ private:
   static long long totalnInst;
   
   const int32_t Id;
-  const int32_t cpuId;
+  const int32_t cpuId;     //cpu 编号
 
   GMemorySystem *gms;
-  GProcessor *gproc;
+  GProcessor *gproc;      //Gprocessor 
 
-  Pid_t pid;
+  Pid_t pid;              //进程编号
 
   BPredictor *bpred;
-  
+
+
+  //下面的flow 是SESC 和 mint之间的桥梁，mint负责执行实际的指令，SESC 模拟处理器和存储系统。
 #ifdef QEMU_DRIVEN
   QEMUFlow flow;
 #else
@@ -126,7 +128,7 @@ protected:
   GStatsHist szBB;
   GStatsHist szFB;
   GStatsHist szFS;
-  long long nGradInsts;
+  long long nGradInsts;             //本CPU取多少个指令
   long long nWPathInsts;
   // *******************
 

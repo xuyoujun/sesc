@@ -49,10 +49,11 @@ class MemObj;
 class ExecutionFlow : public GFlow {
 private:
 
+//线程上下文
 #if (defined MIPS_EMUL)
   ThreadContext *context;
 #else
-  ThreadContext thread;
+  ThreadContext thread;               //正常情况下是这里 
 #endif
 
 #ifdef SESC_SIMPOINT
@@ -64,7 +65,7 @@ private:
 #endif
 
   // picodePC==0 means no thread in this execution flow
-  icode_ptr picodePC;
+  icode_ptr picodePC;   //PC  指令计数器
 
   EventType ev;
   CallbackBase *evCB;
@@ -144,7 +145,7 @@ public:
 #endif
   }
 
-  void loadThreadContext(int32_t pid) {
+  void loadThreadContext(int32_t pid) {  //加载pid的上下文
     I((thread.getPid()==-1)||(thread.getPid()==pid));
     thread.copy(ThreadContext::getContext(pid));
     thread.setPid(pid); // Not in copyContext

@@ -69,7 +69,7 @@ typedef icode_ptr (*PPFPI12[12])(icode_ptr, thread_ptr);
 #define ICODEFS 2
 #define ICODEFD 3
 
-class icode {
+class icode {   //Ò»¸öÖ¸Áî
  private:
 #if (defined TLS)
   OpClass opClass;

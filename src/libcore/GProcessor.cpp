@@ -93,7 +93,8 @@ GProcessor::GProcessor(GMemorySystem *gm, CPU_t i, size_t numFlows)
     misRegPool[j] = 0;
 #endif
 
-  nStall[0] = 0 ; // crash if used
+  nStall[0] = 0 ; // crash if used   
+  //对一些停顿计数
   nStall[SmallWinStall]     = new GStatsCntr("ExeEngine(%d):nSmallWin",i);
   nStall[SmallROBStall]     = new GStatsCntr("ExeEngine(%d):nSmallROB",i);
   nStall[SmallREGStall]     = new GStatsCntr("ExeEngine(%d):nSmallREG",i);
@@ -308,7 +309,7 @@ StallCause GProcessor::sharedAddInst(DInst *dinst)
     return sc;
 
   // BEGIN INSERTION (note that schedule already inserted in the window)
-  dinst->markIssued();
+  dinst->markIssued();   //指令已经发射了
 
 #ifdef SESC_BAAD
   dinst->setRenameTime();
@@ -323,14 +324,14 @@ StallCause GProcessor::sharedAddInst(DInst *dinst)
     regPool[inst->getDstPool()]--;
   }
 #else
-  nInst[inst->getOpcode()]->inc();
+  nInst[inst->getOpcode()]->inc();    //对应的指令类型的统计
   regPool[inst->getDstPool()]--;
 #endif
 
   renameEnergy->inc(); // Rename RAT
   robEnergy->inc(); // one for insert
 
-  rdRegEnergy[inst->getSrc1Pool()]->inc();
+  rdRegEnergy[inst->getSrc1Pool()]->inc();  //对能量的统计
   rdRegEnergy[inst->getSrc2Pool()]->inc();
   wrRegEnergy[inst->getDstPool()]->inc();
 
@@ -358,7 +359,7 @@ int32_t GProcessor::issue(PipeQueue &pipeQ)
   }
 
   do{
-    IBucket *bucket = pipeQ.instQueue.top();
+    IBucket *bucket = pipeQ.instQueue.top(); //一个bucket中可以有多个指令
     do{
       I(!bucket->empty());
       if( i >= IssueWidth ) {
@@ -380,7 +381,7 @@ int32_t GProcessor::issue(PipeQueue &pipeQ)
       }
 #endif
 
-      StallCause c = addInst(dinst);
+      StallCause c = addInst(dinst);   //把指令发射出去
       if (c != NoStall) {
         if (i < RealisticWidth)
           nStall[c]->add(RealisticWidth - i);
@@ -392,7 +393,7 @@ int32_t GProcessor::issue(PipeQueue &pipeQ)
 
     }while(!bucket->empty());
     
-    pipeQ.pipeLine.doneItem(bucket);
+    pipeQ.pipeLine.doneItem(bucket); // 把 bucket归还给bucketpool
     pipeQ.instQueue.pop();
   }while(!pipeQ.instQueue.empty());
 
@@ -451,7 +452,7 @@ void GProcessor::replay(DInst *dinst)
 
 void GProcessor::report(const char *str)
 {
-  Report::field("Proc(%d):clockTicks=%lld", Id, clockTicks);
+  Report::field("Proc(%d):clockTicks=%lld", Id, clockTicks);    //打印cpu的时钟数
   memorySystem->getMemoryOS()->report(str);
 }
 

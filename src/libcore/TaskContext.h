@@ -143,7 +143,7 @@ class TaskContext {
   typedef std::set<Pid_t> Pid_tSet;
   Pid_tSet usedThreads; // TODO: look for a better name
 
-  Pid_t  tid;
+  Pid_t  tid;                //任务的编号
   ThreadContext sContext;
 
   HVersion *memVer;
@@ -173,7 +173,7 @@ class TaskContext {
 
 protected:
   typedef std::vector<TaskContext *> Tid2TaskContextType;
-  static Tid2TaskContextType tid2TaskContext;
+  static Tid2TaskContextType tid2TaskContext;  //tid 到 TaskContest的转换
 
   /********** create/destroy *********/
   TaskContext();

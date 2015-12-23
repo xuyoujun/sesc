@@ -25,7 +25,7 @@ int32_t main(int32_t argc, char **argv, char **envp)
 #ifdef TASKSCALAR
   taskHandler = new TaskHandler();
 #endif
-  osSim = new OSSim(argc, argv, envp);  //初始化一个OS模拟器?
+  osSim = new OSSim(argc, argv, envp);  //初始化一个OS模拟器?  ，，处理各种参数，根据参数中的程序和一些参数建立起和mint
 
   int32_t nProcs = SescConf->getRecordSize("","cpucore");  //得到处理器的个数
 
@@ -34,7 +34,7 @@ int32_t main(int32_t argc, char **argv, char **envp)
 
   for(int32_t i = 0; i < nProcs; i ++) {                   //初始化内存子系统和处理器
     GMemorySystem *gms = new MemorySystem(i);              //内存子系统
-    gms->buildMemorySystem();                              //建一个内存OS,调用MemorySystem 中的build建立
+    gms->buildMemorySystem();                              //建一个内存OS,调用MemorySystem 中的build建立 StdMemoryOS
     ms[i] = gms;
     pr[i] = 0;
 	

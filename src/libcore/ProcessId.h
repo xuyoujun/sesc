@@ -117,9 +117,9 @@ private:
   static pool<ProcessId,true> pidPool;
   friend class pool<ProcessId, true>;
 
-  static std::vector<ProcessId *> pidTable;
+  static std::vector<ProcessId *> pidTable;       //pid  到  ProcessId
   
-  ProcessIdState state;
+  ProcessIdState state;                           
 
   // The priority of the process (lower is better, 0 by default)
   int32_t priority;
@@ -129,17 +129,17 @@ private:
 
   int32_t suspendedCounter;
   
-  CPU_t   cpu;
+  CPU_t   cpu;     //对应的cpu编号
   int32_t     myId;
   int32_t     parentId;
   Pid_t   ppid; // Parent pid
-  Pid_t   pid;
+  Pid_t   pid;   //pid 
   uint32_t   nChilds;
 
   Time_t  spawnTime;
   Time_t  startTime;
 
-  Stats   stats;
+  Stats   stats;                    //对当前的process进行统计
 
   // Set if process can move to another processor once it starts executing
   bool migrable;

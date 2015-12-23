@@ -355,7 +355,7 @@ void ProcessId::report(const char *str)
   for(size_t i=0;i<pidTable.size();i++) {
     if(pidTable[i]==0)
       continue;
-    pidTable[i]->reportId();
+    pidTable[i]->reportId();   //打印每个process的信息
   }
 #endif
 

@@ -59,7 +59,7 @@ void Instruction::initializeMINT(int32_t argc,
 {
   I(InstTable == 0);          // Not recursive calls
 
-  mint_init(argc, argv, envp);
+  mint_init(argc, argv, envp);   //建立一个线程和程序绑定在一起
   
   Mint_output = 0;            // == /dev/null mint reports
 
@@ -80,7 +80,7 @@ void Instruction::initializeMINT(int32_t argc,
   
   char *cFuncName = strdup("func0");
 
-  for(size_t i = 0; i < codeSize; i++) {
+  for(size_t i = 0; i < codeSize; i++) {  //为程序的每个指令建立一个Instruction 对象
     
     // This way to initialize is VERY VERY CRAPPY, but I don't
     // want to replicate code or start to pass parameters as crazy

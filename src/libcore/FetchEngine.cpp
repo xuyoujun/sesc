@@ -277,7 +277,7 @@ void FetchEngine::realFetch(IBucket *bucket, int32_t fetchMax)
     dinst->setLVID(lvid, lvidVersion);
 #endif //TASKSCALAR
 
-    const Instruction *inst = dinst->getInst();
+    const Instruction *inst = dinst->getInst();   //取得一个指令
 
 #if !(defined MIPS_EMUL)
     if (inst->isStore()) {
@@ -344,7 +344,7 @@ void FetchEngine::fetch(IBucket *bucket, int32_t fetchMax)
   }else{
     // Even if there are no inst to fetch, bucket.empty(), it should
     // be markFetched. Otherwise, we would loose count of buckets
-    bucket->markFetchedCB.schedule(IL1HitDelay);
+    bucket->markFetchedCB.schedule(IL1HitDelay);  //callback的作用是把 bucket 加入到bucket 对应的Pipeline的buffer中
   }
 }
 
@@ -355,7 +355,7 @@ void FetchEngine::fakeFetch(IBucket *bucket, int32_t fetchMax)
   if(!issueWrongPath)
     return;
 
-  ushort n2Fetched = FetchWidth;
+  ushort n2Fetched = FetchWidth;                  //一次取多少个指令
 
   do {
 #if (defined TLS)

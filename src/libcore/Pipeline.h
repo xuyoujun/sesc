@@ -63,7 +63,7 @@ protected:
     pipeId=i;
   }
 
-  void markFetched();
+  void markFetched();   //调用pipeLine->readyItem(this)
 
   Time_t getClock() const { return clock; }
   void setClock() {
@@ -74,7 +74,7 @@ public:
   IBucket(size_t size, Pipeline *p, bool clean=false);
   virtual ~IBucket() { }
 
-  StaticCallbackMember0<IBucket, &IBucket::markFetched> markFetchedCB;
+  StaticCallbackMember0<IBucket, &IBucket::markFetched> markFetchedCB;  //创建一个callback
 };
 
 class PipeIBucketLess {
@@ -84,11 +84,11 @@ class PipeIBucketLess {
 
 class Pipeline {
 private:
-  const size_t PipeLength;
+  const size_t PipeLength;                   //流水线的长度
   const size_t bucketPoolMaxSize;
   const int32_t MaxIRequests;
   int32_t nIRequests;
-  FastQueue<IBucket *> buffer;
+  FastQueue<IBucket *> buffer;             //这里面是有指令的，
 
   typedef std::vector<IBucket *> IBucketCont;
   IBucketCont bucketPool;
@@ -138,7 +138,7 @@ public:
     
     bucketPool.push_back(b);
   }
-  IBucket *nextItem();
+  IBucket *nextItem();   //从buffer中取
 };
 
 class PipeQueue {
@@ -146,8 +146,8 @@ public:
   PipeQueue(CPU_t i);
   ~PipeQueue();
 
-  Pipeline pipeLine;
-  FastQueue<IBucket *> instQueue;
+  Pipeline pipeLine;   //流水线
+  FastQueue<IBucket *> instQueue; //指令队列
 
   bool hasWork() const {
     return pipeLine.hasOutstandingItems() || !instQueue.empty();

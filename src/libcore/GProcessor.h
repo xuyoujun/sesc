@@ -69,7 +69,7 @@ protected:
 
   GMemorySystem *memorySystem;   //一个处理器对应一个memorySystem ？
 
-  FastQueue<DInst *> ROB;
+  FastQueue<DInst *> ROB;//（ROB，Reorder Buffer)：重排序缓存
 
   FastQueue<DInst *> replayQ;
   LDSTQ lsq;
@@ -100,7 +100,7 @@ protected:
 
   // Updated by Processor or SMTProcessor. Shows the number of clocks
   // that the processor have been active (fetch + exe engine)
-  Time_t clockTicks;
+  Time_t clockTicks;      //处理器走过的时钟
 
 #ifdef TS_STALL
   Time_t stallUntil; //stall the cpu until
@@ -109,7 +109,7 @@ protected:
   ID(int32_t prevDInstID);
 
   GStatsCntr *nStall[MaxStall];
-  GStatsCntr *nInst[MaxInstType];
+  GStatsCntr *nInst[MaxInstType];           //对每个指令类型进行统计  在sharedAddInst()中会对其进行统计
 #ifdef SESC_MISPATH
   GStatsCntr *nInstFake[MaxInstType];
 #endif

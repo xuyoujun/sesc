@@ -68,7 +68,7 @@ class ThreadContext {
   typedef std::vector<ThreadContext *> ContextVector;
 #endif
   // Static variables
-  static ContextVector pid2context;
+  static ContextVector pid2context;    //pid  到上下文的映射
   
 #if !(defined MIPS_EMUL)
   static Pid_t baseClonedPid;
@@ -80,7 +80,7 @@ class ThreadContext {
   static Pid_t baseActualPid;
   static Pid_t nextActualPid;
   static ContextVector actualPool;
-  static ThreadContext *mainThreadContext;
+  static ThreadContext *mainThreadContext;        //主线程
 #endif //!(defined MIPS_EMUL)
 
   // Memory Mapping

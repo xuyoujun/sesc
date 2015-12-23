@@ -59,7 +59,7 @@ GStatsEnergy::GStatsEnergy(const char *field, const char *blk
   if( eProcStore.size() <= static_cast<size_t>(procId) ) {
     eProcStore.resize(procId+1);
   }
-  eProcStore[procId].push_back(this);
+  eProcStore[procId].push_back(this);   //每个处理器 有个GStatsEnergy
 
   if(eGroupStore.size() <= static_cast<size_t>(grp) )
     eGroupStore.resize(grp + 1);

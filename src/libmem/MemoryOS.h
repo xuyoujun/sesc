@@ -46,8 +46,8 @@ protected:
   TLB ITLB;
   GMemorySystem *memorySystem;
 
-  GStatsCntr missesDTLB;
-  GStatsCntr missesITLB;
+  GStatsCntr missesDTLB;   //Êý¾ÝTLBmiss
+  GStatsCntr missesITLB;   //Ö¸Áî TLB miss
 
   GStatsCntr TLBTime;
   Time_t     startTime;

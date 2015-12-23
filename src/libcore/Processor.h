@@ -35,7 +35,7 @@ private:
   FetchEngine IFID;
   PipeQueue pipeQ;
 
-  int32_t spaceInInstQueue;
+  int32_t spaceInInstQueue;  //指令队列中的空间
 
   MemObj *l1Cache;
   
@@ -72,7 +72,7 @@ protected:
 
   void advanceClock();  // increments the CPU clock of the simulated processor   fetch issue retire
 
-  StallCause addInst(DInst *dinst);
+  StallCause addInst(DInst *dinst);   //指令发射出去
   
   // END VIRTUAL FUNCTIONS of GProcessor
 public:

@@ -58,8 +58,9 @@ double EnergyMgr::etop(double energy)
   
 double EnergyMgr::ptoe(double power) 
 {      // Power to Energy
-  double time = globalClock * (1e9/osSim->getFrequency());
-  return power * time;
+//1e9/osSim->getFrequency() 每个时钟需要的时间 ns??
+  double time = globalClock * (1e9/osSim->getFrequency());  //总纳秒(ns)  ？？
+  return power * time;                                      //得到的是nJ  纳焦??
 }
   
 double EnergyMgr::cycletons(double clk) 

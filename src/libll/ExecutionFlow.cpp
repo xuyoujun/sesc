@@ -53,6 +53,9 @@ ExecutionFlow::ExecutionFlow(int32_t cId, int32_t i, GMemorySystem *gmem)
   goingRabbit = false;
 
   // Copy the address space from initial context
+
+  
+//复制一个thread 从ThreadContext::getMainThreadContext(),,MainThreadContext是在初始化阶段根据即将运行的程序创建的
   memcpy(&thread,ThreadContext::getMainThreadContext(),sizeof(ThreadContext));
 
   thread.setPid(-1);
@@ -257,7 +260,7 @@ void ExecutionFlow::switchIn(int32_t i)
 #else
   I(thread.getPid() == -1);
   I(thread.getPicode()==&invalidIcode);
-  loadThreadContext(i);
+  loadThreadContext(i);   //加载进程
   I(thread.getPid() == i);
 
 #ifdef TS_TIMELINE

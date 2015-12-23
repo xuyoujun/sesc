@@ -116,10 +116,10 @@ void Instruction::initialize(int32_t argc
   } else if(strcmp(traceMode, "simics") == 0) {
     //initializeSimicsTrace(argc, argv, envp);
   }
-#elif (defined MIPS_EMUL)
+#elif (defined MIPS_EMUL)    //正常情况下不执行这里的代码
   emulInit(argc, argv, envp);
 #else
-  initializeMINT(argc, argv, envp);
+  initializeMINT(argc, argv, envp);//而是执行这里的代码
 #endif
 }  
 

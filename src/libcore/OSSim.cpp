@@ -413,7 +413,7 @@ void OSSim::processParams(int32_t argc, char **argv, char **envp)
 
   SescConf = new SConfig(confName);   // First thing to do  //»ñµÃÅäÖÃÎÄ¼þ¶ÔÏó
 
-  Instruction::initialize(nargc, nargv, envp);                 //³õÊ¼»¯Instruction class
+  Instruction::initialize(nargc, nargv, envp); //³õÊ¼»¯Instruction class£¬Óëmint½¨Á¢ÁªÏµ£¬ÔÚmintÖÐ»á½¨Á¢Ïß³ÌºÍ³ÌÐò¶ÔÓ¦ÆðÀ´
 
   if( reportTo ) {
     reportFile = (char *)malloc(30 + strlen(reportTo));
@@ -625,9 +625,9 @@ void OSSim::eventExit(Pid_t cpid, int32_t err)
   if(proc->getState()==RunningState || proc->getState()==ReadyState )
     cpus.makeNonRunnable(proc);
   // Try to wakeup parent
-  tryWakeupParent(cpid);
+  tryWakeupParent(cpid);     //»½ÐÑ¸¸½ø³Ì
   // Destroy the process
-  proc->destroy();
+  proc->destroy();           //destory Õâ¸ö½ø³Ì
   // Free the ThreadContext  
 #ifdef TASKSCALAR
   // Do not recycle pid 0 in TaskScalar
@@ -904,7 +904,7 @@ void OSSim::initBoot()
   // -1 is the parent pid
   // 0 is the current thread, and it has no flags
   
-  //Ô­ÐÍ,void eventSpawn(Pid_t curPid, Pid_t newPid, int32_t flags, bool stopped=false);
+  //Ô­ÐÍ:void eventSpawn(Pid_t curPid, Pid_t newPid, int32_t flags, bool stopped=false);
   //å**********½¨Á¢Ò»¸ö½ø³Ì
   eventSpawn(-1,0,0);
 #endif
@@ -1025,9 +1025,9 @@ void OSSim::preBoot()
 void OSSim::postBoot()
 {
   // Launch threads
-  cpus.run();
+  cpus.run();  //ÔËÐÐ³ÌÐò
 
-  simFinish();
+  simFinish();  //´òÓ¡½á¹û
 }
 
 void OSSim::simFinish()
@@ -1065,9 +1065,9 @@ void OSSim::report(const char *str)
   ProcessId::report(str);
 
   for(size_t i=0;i<cpus.size();i++) {
-    GProcessor *gproc = cpus.getProcessor(i);
+    GProcessor *gproc = cpus.getProcessor(i);  //»ñµÃÃ¿¸öcpu
     if( gproc )
-      gproc->report(str);
+      gproc->report(str);                      //´òÓ¡Ã¿¸öcpuµÄÊ±ÖÓÐÅÏ¢
   }
   
   Report::field("OSSim:reportName=%s", str);
@@ -1085,12 +1085,12 @@ void OSSim::report(const char *str)
 
   Report::field("OSSim:pseudoreset=%lld",snapshotGlobalClock);
 
-#ifdef SESC_ENERGY
+#ifdef SESC_ENERGY     // ´òÓ¡ºÍÄÜÁ¿¹¦ºÄÓÐ¹ØµÄÍ³¼ÆÖµ
   const char *procName = SescConf->getCharPtr("","cpucore",0);
   double totPower      = 0.0;
   double totClockPower = 0.0;
 
-  for(size_t i=0;i<cpus.size();i++) {
+  for(size_t i=0;i<cpus.size();i++) {   //Ã¿¸öcpuµÄÄÜÁ¿ÏûºÄ
     double pPower = EnergyMgr::etop(GStatsEnergy::getTotalProc(i));
 
     double maxClockEnergy = EnergyMgr::get(procName,"clockEnergy",i);
@@ -1111,15 +1111,15 @@ void OSSim::report(const char *str)
     totClockPower += clockPower;
 
     // print the rest of the report fields
-    GStatsEnergy::dump(i);
-    Report::field("Proc(%d):clockPower=%g",i,clockPower);
-    Report::field("Proc(%d):totPower=%g",i,corePower);
+    GStatsEnergy::dump(i); //´¦ÀíÆ÷i¶ÔÓ¦µÄfetch,issue,mem,exec µÄpower
+    Report::field("Proc(%d):clockPower=%g",i,clockPower);//´¦ÀíÆ÷iµÄclock power
+    Report::field("Proc(%d):totPower=%g",i,corePower);    //´¦ÀíÆ÷i×ÜµÄpower
   }
-  GStatsEnergy::dump();
-  Report::field("PowerMgr:clockPower=%g",totClockPower);
-  Report::field("PowerMgr:totPower=%g",totPower);
-  Report::field("EnergyMgr:clockEnergy=%g",EnergyMgr::ptoe(totClockPower));
-  Report::field("EnergyMgr:totEnergy=%g",EnergyMgr::ptoe(totPower));
+  GStatsEnergy::dump();  //´òÓ¡³ö×ÜµÄfetch,issue,mem,exec µÄpowerºÍenergy
+  Report::field("PowerMgr:clockPower=%g",totClockPower);   //×ÜµÄÊ±ÖÓpower
+  Report::field("PowerMgr:totPower=%g",totPower);          //×ÜµÄpower
+  Report::field("EnergyMgr:clockEnergy=%g",EnergyMgr::ptoe(totClockPower));//×ÜµÄÊ±ÖÓenergy
+  Report::field("EnergyMgr:totEnergy=%g",EnergyMgr::ptoe(totPower));   //×ÜµÄenergy
 #endif
   
 #ifdef TASKSCALAR
@@ -1128,6 +1128,8 @@ void OSSim::report(const char *str)
 
   // GStats must be the last to be called because previous ::report
   // can update statistics
+
+//´òÓ¡ºÍpowerÃ»ÓÐ¹ØµÄÍ³¼ÆÖµ
   GStats::report(str);
 
 #if (defined TLS)

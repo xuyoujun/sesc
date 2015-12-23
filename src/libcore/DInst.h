@@ -94,14 +94,14 @@ class DInstNext {
 #endif
 };
 
-class DInst {
+class DInst {    //dynastic Instruction
  public:
   // In a typical RISC processor MAX_PENDING_SOURCES should be 2
   static const int32_t MAX_PENDING_SOURCES=2;
 
 private:
 
-  static pool<DInst> dInstPool;
+  static pool<DInst> dInstPool;   //动态指令池，先创建一些DInst的对象放在池中
 
   DInstNext pend[MAX_PENDING_SOURCES];
   DInstNext *last;
@@ -192,11 +192,11 @@ private:
   InstID oracleID;
 #endif
 
-  const Instruction *inst;
+  const Instruction *inst;    //对应的静态指令
   VAddr vaddr;
   Resource    *resource;
   DInst      **RATEntry;
-  FetchEngine *fetch;
+  FetchEngine *fetch;   //对应的取指引擎
 
 #ifdef TASKSCALAR
   int32_t         dataDepViolationID;

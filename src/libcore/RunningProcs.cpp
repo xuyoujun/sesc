@@ -252,7 +252,7 @@ void RunningProcs::switchIn(CPU_t id, ProcessId *proc)
 
   workingListAdd(core);
 
-  proc->switchIn(id);     //proc 运行在cpu id上
+  proc->switchIn(id);     //proc 运行在cpu id上,Proc 可运行
 #ifdef TS_STALL  
   core->setStallUntil(globalClock+5);
 #endif  
