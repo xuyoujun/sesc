@@ -721,7 +721,10 @@ OP(mint_sesc_sysconf)
   // Return from the call
   return pthread->getRetIcode();
 }
-
+/*#define OP(NAME) \
+    icode_ptr \
+    NAME(icode_ptr picode, thread_ptr pthread)
+*/
 OP(mint_sesc_spawn){
   // Set things up for the return from this call
   pthread->setPCIcode(pthread->getRetIcode());
