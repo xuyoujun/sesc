@@ -172,7 +172,7 @@ OSSim::OSSim(int32_t argc, char **argv, char **envp)
 
 #ifdef SESC_ENERGY             //³õÊ¼»¯ÄÜÁ¿×ÓÏµÍ³
   // initialize the energy subsystem
-  EnergyMgr::init();
+  EnergyMgr::init();           //Ôø¾­ÔÚÕâÀï³öÏÖ¹ıÒ»¸ö´óbug£¬£¬Ô½²»ÆğÑÛµÄµØ·½Ô½ÈİÒ×³ö´í
 #endif
 }
 
@@ -1091,6 +1091,8 @@ void OSSim::report(const char *str)
   double totClockPower = 0.0;
 
   for(size_t i=0;i<cpus.size();i++) {   //Ã¿¸öcpuµÄÄÜÁ¿ÏûºÄ
+
+    //å*å*å*×ª»¯³É¹¦ºÄÊ±£¬²»ÊÇÒÔÃ¿¸öcpuÊµ¼ÊÖ´ĞĞµÄclock¼ÆËã£¬¶øÊÇÒÔÔËĞĞÊ±¼ä×î³¤µÄcpuµÄclock¼ÆËã
     double pPower = EnergyMgr::etop(GStatsEnergy::getTotalProc(i));
 
     double maxClockEnergy = EnergyMgr::get(procName,"clockEnergy",i);

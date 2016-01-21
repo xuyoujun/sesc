@@ -186,7 +186,7 @@ GProcessor::GProcessor(GMemorySystem *gm, CPU_t i, size_t numFlows)
   clockTicks=0;
 
   char cadena[100];
-  sprintf(cadena, "Proc(%d)", (int)i);
+  sprintf(cadena, "Proc(%d)", (int)i);  //
 
   renameEnergy = new GStatsEnergy("renameEnergy", cadena, i, IssuePower
                                   ,EnergyMgr::get("renameEnergy",i));
